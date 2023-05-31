@@ -10,7 +10,6 @@ function patrons({ nft, expiry }) {
   const [messageApi, contextHolder] = message.useMessage();
 
   async function addMonth() {
-    
     const provider = new ethers.BrowserProvider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     const connectedWallet = await provider.getSigner();
@@ -20,20 +19,17 @@ function patrons({ nft, expiry }) {
       value: parseEther("0.5"),
     });
 
-    tx.wait().then(async (r)=>{
-
+    tx.wait().then(async (r) => {
       const res = await axios.get(`http://localhost:3001/extraMonth`, {
         params: { id: nft.token_id, expiry: expiry },
       });
 
       messageApi.success("Subscription Extended - Reloading Page in 4 seconds");
 
-      setTimeout(()=>{
+      setTimeout(() => {
         location.reload();
-      },4000)
-
-    })
-
+      }, 4000);
+    });
   }
 
   return (
@@ -135,7 +131,7 @@ function patrons({ nft, expiry }) {
             <div className={styles.cardTitle}>Number</div>
             <div>{nft.token_id}</div>
             <div className={styles.cardTitle}>Expiry</div>
-            <div>{(new Date(expiry).toLocaleDateString())}</div>
+            <div>{new Date(expiry).toLocaleDateString()}</div>
             <div className={styles.cardTitle}>Scope</div>
             <div>
               Full Access to Julie Smith's exclusive content, custom rewards and
@@ -162,9 +158,7 @@ function patrons({ nft, expiry }) {
   );
 }
 
-
 export async function getServerSideProps(context) {
-
   const session = await getSession(context);
 
   //check if logged in
@@ -195,8 +189,7 @@ export async function getServerSideProps(context) {
     (e) => e.owner_of.toLowerCase() === session.user.address.toLowerCase()
   );
 
-
-  if(nft){
+  if (nft) {
     const metadata = await axios.get(nft.token_uri);
 
     if (metadata.data.attributes[0].value >= Date.now()) {
@@ -207,8 +200,8 @@ export async function getServerSideProps(context) {
         },
       };
     }
-  }else{
-    console.log("no valid subscription")
+  } else {
+    console.log("no valid subscription");
   }
 
   //redirect to home page
@@ -218,10 +211,6 @@ export async function getServerSideProps(context) {
       permanent: false,
     },
   };
-
-  
-
 }
-
 
 export default patrons;

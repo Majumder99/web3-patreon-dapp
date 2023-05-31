@@ -1,5 +1,5 @@
+import Header from "../components/Header";
 import "../styles/globals.css";
-import Header from "../components/header";
 import styles from "../styles/Home.module.css";
 import { SessionProvider } from "next-auth/react";
 

@@ -8,12 +8,10 @@ import { useSession } from "next-auth/react";
 function App() {
   const [messageApi, contextHolder] = message.useMessage();
   const { push } = useRouter();
-  const {status} = useSession();
+  const { status } = useSession();
 
   async function purchaseNFT() {
-
-    if(status === "authenticated"){
-
+    if (status === "authenticated") {
       const provider = new ethers.BrowserProvider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
       const connectedWallet = await provider.getSigner();
@@ -22,12 +20,13 @@ function App() {
         "xxx",
         ["function safeMint(address to, string memory uri) public payable"],
         connectedWallet
-        );
+      );
 
       const purchase = await PatronContract.safeMint(
-        connectedWallet.address, "",
-        {value: parseEther("0.5")}
-      )
+        connectedWallet.address,
+        "",
+        { value: parseEther("0.5") }
+      );
 
       purchase.wait().then(async (receipt) => {
         console.log(receipt);
@@ -39,15 +38,11 @@ function App() {
           params: { id: id },
         });
 
-        messageApi.success("Patron NFT Purchased")
-      })
-
-
-    }else{
+        messageApi.success("Patron NFT Purchased");
+      });
+    } else {
       messageApi.warning("please connect wallet first");
     }
-      
-
   }
   return (
     <>
