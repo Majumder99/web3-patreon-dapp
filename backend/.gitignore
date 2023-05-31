@@ -1,0 +1,14 @@
+serviceAccount.json
+patreon-226b8-firebase-adminsdk-hgxh2-35479f92e4.json
+*.json
+node_modules
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+
+# Hardhat files
+cache
+artifacts
+
